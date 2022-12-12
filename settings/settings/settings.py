@@ -40,6 +40,9 @@ INSTALLED_APPS = [
 
     'django_filters',
     'django_cleanup',
+
+    'core',
+    'shop',
 ]
 
 MIDDLEWARE = [
