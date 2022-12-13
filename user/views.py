@@ -1,39 +1,39 @@
 from django.contrib.auth import login, authenticate, logout
+from django.contrib.auth.views import LoginView
 from django.http import HttpResponseRedirect
-from django.shortcuts import redirect
-from django.urls import reverse_lazy
-from django.views.generic import CreateView, FormView
-
+from django.urls import reverse_lazy, reverse
+from django.views import View
+from django.views.generic import CreateView
 from user.forms import UserRegistrationForm
-from user.models import CustomUser
 
-class Register(FormView):
-    template_name = 'user/register.html'
+
+class SignUp(CreateView):
     form_class = UserRegistrationForm
-    success_url = 'index'
+    success_url = 'shop:index'
+    template_name = 'user/register.html'
 
+    """Автоматический логи после регистрации"""
     def form_valid(self, form):
-        #save the new user first
+        """сохраняем юзера"""
         form.save()
-        #get the username and password
+        """сохраняем юзера"""
         username = self.request.POST['username']
         password = self.request.POST['password1']
-        #authenticate user then login
-        user = authenticate(username=username, password=password)
+        """аутенфицируем юзера"""
+        user = authenticate(username=form.cleaned_data['username'],
+                            password=form.cleaned_data['password1'],)
         login(self.request, user)
-        return HttpResponseRedirect(self.get_success_url)
+        return HttpResponseRedirect(reverse('shop:index'))
 
 
+class UserLogin(LoginView):
+    template_name = 'user/login.html'
 
-def login_view(request):
-    username = request.POST['username']
-    password = request.POST['password']
-    user = authenticate(request, username=username, password=password)
-    if user is not None:
-        login(request, user)
-        redirect('index.html')
+    def get_success_url(self):
+        return reverse_lazy('shop:index')
 
 
-def logout_view(request):
-    logout(request)
-    redirect('index.html')
+class LogoutView(View):
+    def get(self, request):
+        logout(request)
+        return HttpResponseRedirect(reverse('shop:index'))
