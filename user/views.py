@@ -1,13 +1,16 @@
 from django.contrib.auth import login, authenticate, logout
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy, reverse
 from django.views import View
-from django.views.generic import CreateView
+from django.views.generic import CreateView, ListView
 from user.forms import UserRegistrationForm
+from user.models import CustomUser
 
 
 class SignUp(CreateView):
+    """Класс регистрации"""
     form_class = UserRegistrationForm
     success_url = 'shop:index'
     template_name = 'user/register.html'
@@ -27,6 +30,7 @@ class SignUp(CreateView):
 
 
 class UserLogin(LoginView):
+    """Класс входа"""
     template_name = 'user/login.html'
 
     def get_success_url(self):
@@ -34,6 +38,14 @@ class UserLogin(LoginView):
 
 
 class LogoutView(View):
+    """Класс выхода"""
     def get(self, request):
         logout(request)
         return HttpResponseRedirect(reverse('shop:index'))
+
+
+class PersonalArea(LoginRequiredMixin, ListView):
+    """Класс личного кабинета"""
+    login_url = 'login'
+    model = CustomUser
+    template_name = 'user/personal_area.html'

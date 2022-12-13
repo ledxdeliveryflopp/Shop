@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en" class="h-100">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'user/personal_area.css' %}">
+    {%block title%} <title>Дизайн студия</title> {%endblock%}
+</head>
+<body>
+<div class="sidenav">
+    <a href="{% url 'shop:index' %}">Домашняя страница</a>
+    {% if user.is_authenticated %}
+        <a href="#">Личный кабинет: {{ request.user.username }}</a>
+        <a href="{% url 'user:logout' %}">Выход</a>
+    {%else%}
+        <a href="{% url 'user:login' %}">Вход</a>
+        <a href="{% url 'user:registration' %}">Регистрация</a>
+    {%endif%}
+</div>
+
+<div class="post-wrap">
+    <div class="post-item">
+        <div class="item-content">
+            <div class="item-icon group">
+                {% if user.avatar %}
+                    <img src="{{ request.user.avatar.url }}" alt="connect" style="max-height:150px">
+                {% endif %}
+            </div>
+            <div class="item-body">
+                <h3>Имя: {{ user.username }}</h3>
+                {% if user.avatar %}
+                    <h3>Описание профиля: {{ user.description }}</h3>
+                {% endif %}
+                <p><a href="#"><strong>Удалить профиль?
+                </strong></a></p>
+            </div>
+            <div class="item-footer">
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

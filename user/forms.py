@@ -8,7 +8,7 @@ class UserRegistrationForm(UserCreationForm):
 
     class Meta:
         model = CustomUser
-        fields = ('username', 'avatar')
+        fields = ('username', 'avatar', 'description')
 
 
 # class UserLoginForm(forms.ModelForm):
