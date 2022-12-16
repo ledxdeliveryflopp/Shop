@@ -5,7 +5,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse_lazy, reverse
 from django.views import View
-from django.views.generic import CreateView, ListView, UpdateView
+from django.views.generic import CreateView, ListView, UpdateView, DeleteView
 from user.forms import UserRegistrationForm, UserUpdateForm
 from user.models import CustomUser
 
@@ -65,3 +65,20 @@ class UpdateUser(LoginRequiredMixin, UpdateView):
         if obj.id != self.request.user.id:
             return render(request, '404.html')
         return super(UpdateUser, self).dispatch(request, *args, **kwargs)
+
+
+class DeleteUser(LoginRequiredMixin, DeleteView):
+    model = CustomUser
+    success_url = reverse_lazy('shop:index')
+
+    def dispatch(self, request, *args, **kwargs):
+        """проверка данных перед ответом """
+        if request.user.is_authenticated:
+            return HttpResponseRedirect(reverse('user:login'))
+        obj = self.get_object()
+        if obj.id != self.request.user.id:
+            return render(request, '404.html')
+        return super(DeleteUser, self).dispatch(request, *args, **kwargs)
+
+    def form_valid(self):
+        self.object.delete()

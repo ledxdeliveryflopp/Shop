@@ -22,7 +22,7 @@
 {% block content %}
     {% if product_list %}
         {% for product in product_list %}
-            {% if product.is_active != False %}
+            {% if request.user.is_staff %}
                 <div class="post-wrap">
                     <div class="post-item">
                         <div class="item-content">
@@ -45,7 +45,7 @@
                     </div>
                 </div>
             {% else %}
-                {% if request.user.is_staff %}
+                {% if product.is_active != False %}
                     <div class="post-wrap">
                         <div class="post-item">
                             <div class="item-content">
@@ -59,10 +59,6 @@
                                     <p><a href="{% url 'company:company_info' product.company_id  %}">
                                         Компания производитель: {{ product.company }}</a></p>
                                     <p>Цена: {{ product.price }} руб</p>
-                                    {% if request.user.is_staff %}
-                                        <p><a href="{% url 'shop:delete_product' product.id %}">
-                                            <strong>Удалить продукт?</strong></a></p>
-                                    {% endif %}
                                 </div>
                             </div>
                         </div>

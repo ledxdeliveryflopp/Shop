@@ -32,9 +32,10 @@
                 {% if user.avatar %}
                     <h3>Описание профиля: {{ user.description }}</h3>
                 {% endif %}
-                <p><a href="{% url 'user:update_user' user.id %}"><strong>Изменить профиль?
-                <p><a href="#"><strong>Удалить профиль?
-                </strong></a></p>
+                <p><a href="{% url 'user:update_user' user.id %}">
+                    <strong>Изменить профиль?</strong></a></p>
+                <p><a href="{% url 'user:delete_user' user.id %}">
+                    <strong>Удалить профиль?</strong></a></p>
             </div>
             <div class="item-footer">
             </div>
