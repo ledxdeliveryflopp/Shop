@@ -1,6 +1,5 @@
 from django.core.validators import validate_image_file_extension
 from django.db import models
-
 from core.models import Core
 
 

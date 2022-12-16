@@ -12,6 +12,7 @@
     <a href="#">Домашняя страница</a>
     {% if user.is_authenticated %}
     <a href="{% url 'user:personal_area' %}">Личный кабинет: {{ request.user.username }}</a>
+    <a href="{% url 'shop:create_product' %}">Создание продукта</a>
     <a href="{% url 'user:logout' %}">Выход</a>
     {%else%}
     <a href="{% url 'user:login' %}">Вход</a>
@@ -21,27 +22,56 @@
 {% block content %}
     {% if product_list %}
         {% for product in product_list %}
-
-            <div class="post-wrap">
-                <div class="post-item">
-                    <div class="item-content">
-                        <div class="item-icon group">
-                            <p>Название: {{ product.title }} </p>
-                            <img src="{{ product.image.url}}" alt="connect" style="max-height:150px">
-                            <p>Описание: {{ product.description }}</p>
-                            <p>Категория тавара:{% for category in product.category.all %}
-                                        {# выводим m2m#}
-                                {{ category.title }},{% endfor %}</p>
-                            <p><a href="{% url 'company:company_info' product.company_id  %}">
-                                Компания производитель: {{ product.company }}</a></p>
-                            <p>Цена: {{ product.price }} руб</p>
+            {% if product.is_active != False %}
+                <div class="post-wrap">
+                    <div class="post-item">
+                        <div class="item-content">
+                            <div class="item-icon group">
+                                <p>Название: {{ product.title }} </p>
+                                <img src="{{ product.image.url}}" alt="connect" style="max-height:150px">
+                                <p>Описание: {{ product.description }}</p>
+                                <p>Категория тавара:{% for category in product.category.all %}
+                                    {# выводим m2m#}
+                                    {{ category.title }},{% endfor %}</p>
+                                <p><a href="{% url 'company:company_info' product.company_id  %}">
+                                    Компания производитель: {{ product.company }}</a></p>
+                                <p>Цена: {{ product.price }} руб</p>
+                                {% if request.user.is_staff %}
+                                    <p><a href="{% url 'shop:delete_product' product.id %}">
+                                        <strong>Удалить продукт?</strong></a></p>
+                                {% endif %}
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-
+            {% else %}
+                {% if request.user.is_staff %}
+                    <div class="post-wrap">
+                        <div class="post-item">
+                            <div class="item-content">
+                                <div class="item-icon group">
+                                    <p>Название: {{ product.title }} </p>
+                                    <img src="{{ product.image.url}}" alt="connect" style="max-height:150px">
+                                    <p>Описание: {{ product.description }}</p>
+                                    <p>Категория тавара:{% for category in product.category.all %}
+                                        {# выводим m2m#}
+                                        {{ category.title }},{% endfor %}</p>
+                                    <p><a href="{% url 'company:company_info' product.company_id  %}">
+                                        Компания производитель: {{ product.company }}</a></p>
+                                    <p>Цена: {{ product.price }} руб</p>
+                                    {% if request.user.is_staff %}
+                                        <p><a href="{% url 'shop:delete_product' product.id %}">
+                                            <strong>Удалить продукт?</strong></a></p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endif %}
         {% endfor %}
     {% endif %}
 {% endblock %}
+
 </body>
 </html>

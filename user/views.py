@@ -24,7 +24,7 @@ class SignUp(CreateView):
         user = authenticate(username=form.cleaned_data['username'],
                             password=form.cleaned_data['password1'],)
         login(self.request, user)
-        return HttpResponseRedirect(reverse('shop:index'))
+        return HttpResponseRedirect(reverse('user:personal_area'))
 
 
 class UserLogin(LoginView):
@@ -60,9 +60,8 @@ class UpdateUser(LoginRequiredMixin, UpdateView):
     def dispatch(self, request, *args, **kwargs):
         """проверка данных перед ответом """
         if not request.user.is_authenticated:
-            return self.handle_no_permission()
+            return HttpResponseRedirect(reverse('user:login'))
         obj = self.get_object()
-        if obj.username != self.request.user.username:
+        if obj.id != self.request.user.id:
             return render(request, '404.html')
         return super(UpdateUser, self).dispatch(request, *args, **kwargs)
-

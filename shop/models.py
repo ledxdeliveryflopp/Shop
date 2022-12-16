@@ -1,13 +1,12 @@
 from django.core.validators import validate_image_file_extension
 from django.db import models
-
 from core.models import Core
-# blank=False, null=False,
 from company.models import Company
 
 
 class Category(models.Model):
-    title = models.CharField(max_length=50, blank=False, verbose_name='Категория товара')
+    title = models.CharField(max_length=50, blank=False, unique=True,  verbose_name='Категория '
+                                                                                    'товара')
 
     class Meta:
         verbose_name = 'Категория товара'
@@ -23,7 +22,7 @@ class Product(Core):
     company = models.ForeignKey(Company, on_delete=models.CASCADE, verbose_name='Компания',
                                 null=True)
     category = models.ManyToManyField(Category, verbose_name='Категория')
-    price = models.IntegerField(max_length=20, default=30, blank=False, null=False)
+    price = models.IntegerField(default=30, blank=False, null=False)
 
     class Meta:
         verbose_name = 'Продукт'

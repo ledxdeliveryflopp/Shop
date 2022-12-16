@@ -6,20 +6,19 @@
     <title>Регистрация</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     {% load static %}
-    <link rel="stylesheet" href="{% static 'user/register.css' %}">
+    <link rel="stylesheet" href="{% static 'shop/create_product.css' %}">
 </head>
 <body>
 
 <div class="container">
-    <h1>Изменение пользователя</h1>
+    <h1>Создание продукта</h1>
     <p>Следуйте форме</p>
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
-        <input class="w-100 btn btn-lg btn-primary" type="submit" value="Изменить">
+        <input class="w-100 btn btn-lg btn-primary" type="submit" value="создать">
     </form>
 </div>
-<div class="container signin">
 </div>
 </body>
 </html>
