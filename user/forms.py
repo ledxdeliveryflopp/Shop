@@ -11,8 +11,8 @@ class UserRegistrationForm(UserCreationForm):
         fields = ('username', 'avatar', 'description')
 
 
-# class UserLoginForm(forms.ModelForm):
-#
-#     class Meta:
-#         model = CustomUser
-#         fields = ('username','password',)
+class UserUpdateForm(forms.ModelForm):
+
+    class Meta:
+        model = CustomUser
+        fields = ('username', 'description',  'avatar',)

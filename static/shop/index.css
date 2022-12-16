@@ -81,6 +81,8 @@ body {
     max-width:100%;
     height:auto;
     display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
     justify-content: center;
 }
 .item-icon:before {

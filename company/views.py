@@ -1,9 +1,8 @@
-from django.views.generic import ListView
-
+from django.views.generic import DetailView
 from .models import Company
 
 
-class AllCompanyView(ListView):
+class CompanyInfoView(DetailView):
     model = Company
     queryset = Company.objects.filter(is_active=True)
-    # template_name = 'company/all_company.html'
+    template_name = 'company/company_info.html'

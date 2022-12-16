@@ -7,14 +7,14 @@ from company.models import Company
 
 
 class Category(models.Model):
-    category = models.CharField(max_length=50, blank=False, verbose_name='Категория товара')
+    title = models.CharField(max_length=50, blank=False, verbose_name='Категория товара')
 
     class Meta:
         verbose_name = 'Категория товара'
         verbose_name_plural = 'Категории товаров'
 
     def __str__(self) -> str:
-        return f'{self.category}'
+        return f'{self.title}'
 
 
 class Product(Core):
@@ -22,7 +22,8 @@ class Product(Core):
         validate_image_file_extension], verbose_name='картинка', blank=False)
     company = models.ForeignKey(Company, on_delete=models.CASCADE, verbose_name='Компания',
                                 null=True)
-    category = models.ManyToManyField(Category, verbose_name='Категория',  null=True)
+    category = models.ManyToManyField(Category, verbose_name='Категория')
+    price = models.IntegerField(max_length=20, default=30, blank=False, null=False)
 
     class Meta:
         verbose_name = 'Продукт'

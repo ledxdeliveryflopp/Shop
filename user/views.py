@@ -2,10 +2,11 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
 from django.http import HttpResponseRedirect
+from django.shortcuts import render
 from django.urls import reverse_lazy, reverse
 from django.views import View
-from django.views.generic import CreateView, ListView
-from user.forms import UserRegistrationForm
+from django.views.generic import CreateView, ListView, UpdateView
+from user.forms import UserRegistrationForm, UserUpdateForm
 from user.models import CustomUser
 
 
@@ -19,9 +20,6 @@ class SignUp(CreateView):
     def form_valid(self, form):
         """сохраняем юзера"""
         form.save()
-        """сохраняем юзера"""
-        username = self.request.POST['username']
-        password = self.request.POST['password1']
         """аутенфицируем юзера"""
         user = authenticate(username=form.cleaned_data['username'],
                             password=form.cleaned_data['password1'],)
@@ -49,3 +47,22 @@ class PersonalArea(LoginRequiredMixin, ListView):
     login_url = 'login'
     model = CustomUser
     template_name = 'user/personal_area.html'
+
+
+class UpdateUser(LoginRequiredMixin, UpdateView):
+    """Класс обновления юзера"""
+    login_url = 'login'
+    model = CustomUser
+    template_name = 'user/update_user.html'
+    form_class = UserUpdateForm
+    success_url = reverse_lazy('user:personal_area')
+
+    def dispatch(self, request, *args, **kwargs):
+        """проверка данных перед ответом """
+        if not request.user.is_authenticated:
+            return self.handle_no_permission()
+        obj = self.get_object()
+        if obj.username != self.request.user.username:
+            return render(request, '404.html')
+        return super(UpdateUser, self).dispatch(request, *args, **kwargs)
+

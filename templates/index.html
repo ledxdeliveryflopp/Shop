@@ -18,16 +18,30 @@
     <a href="{% url 'user:registration' %}">Регистрация</a>
     {%endif%}
 </div>
+{% block content %}
+    {% if product_list %}
+        {% for product in product_list %}
 
-<div class="post-wrap">
-    <div class="post-item">
-        <div class="item-content">
-            <div class="item-icon group">
-                <img src="#" alt="connect" style="max-height:150px">
+            <div class="post-wrap">
+                <div class="post-item">
+                    <div class="item-content">
+                        <div class="item-icon group">
+                            <p>Название: {{ product.title }} </p>
+                            <img src="{{ product.image.url}}" alt="connect" style="max-height:150px">
+                            <p>Описание: {{ product.description }}</p>
+                            <p>Категория тавара:{% for category in product.category.all %}
+                                        {# выводим m2m#}
+                                {{ category.title }},{% endfor %}</p>
+                            <p><a href="{% url 'company:company_info' product.company_id  %}">
+                                Компания производитель: {{ product.company }}</a></p>
+                            <p>Цена: {{ product.price }} руб</p>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
-</div>
 
+        {% endfor %}
+    {% endif %}
+{% endblock %}
 </body>
 </html>

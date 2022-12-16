@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'company/company_info.css' %}">
+</head>
+<body>
+
+<div class="sidenav">
+    <a href="{% url 'shop:index' %}">Домашняя страница</a>
+    {% if user.is_authenticated %}
+        <a href="{% url 'user:personal_area' %}">Личный кабинет: {{ request.user.username }}</a>
+        <a href="{% url 'user:logout' %}">Выход</a>
+    {%else%}
+        <a href="{% url 'user:login' %}">Вход</a>
+        <a href="{% url 'user:registration' %}">Регистрация</a>
+    {%endif%}
+</div>
+{% block content %}
+
+            <div class="post-wrap">
+                <div class="post-item">
+                    <div class="item-content">
+                        <div class="item-icon group">
+                            <p>Название: {{ company.title }} </p>
+                            {% if company.image %}
+                                <img src="{{ company.image.url}}" alt="connect" style="max-height:150px">
+                            {% endif %}
+                            <p>Описание: {{ company.description }}</p>
+                            <p>Категория компании:{% for category in company.category.all %}
+                                        {# выводим m2m#}
+                                {{ category.title }},{% endfor %}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+{% endblock %}
+</body>
+</html>
